@@ -3,7 +3,8 @@ import { useNavigate } from "react-router";
 import api from "../../services/api";
 import AuthContext from "../../context/auth";
 import { Input, Container, Title, Button, Text, View } from "../../styleglobal";
-
+import { ToastContainer } from "react-toastify";
+import { toastError, toastSuccess } from "../../components/Toast";
 export default function Change() {
   const history = useNavigate();
   const { userID } = useContext(AuthContext);
@@ -44,15 +45,16 @@ export default function Change() {
     }
     try {
       api.put(`/user/${userID}`, data).then((result) => {
-        BackHome();
-      });
+        toastSuccess("Usuário alterado com sucesso")
+      }).then(() => setTimeout(() => BackHome(), 2000))
     } catch (error) {
-      console.log(error);
+      toastError("Erro ao alterar usuário")
     }
   }
 
   return (
     <Container>
+      <ToastContainer />
       <Title>Alterar usuário</Title>
       <Text>Nome</Text>
       <Input

@@ -2,7 +2,8 @@ import React, { useState, useContext } from "react";
 import api from "../../services/api";
 import AuthContext from "../../context/auth";
 import { login } from "../../services/auth";
-
+import { ToastContainer } from 'react-toastify'
+import { toastError } from "../../components/Toast";
 import { Input, Container, Title, Button, Text } from "../../styleglobal";
 
 export default function Login() {
@@ -18,12 +19,11 @@ export default function Login() {
         {
           email,
           password
-        })
-        .then((result) => {
+        }).then((result) => {
           signIn(result.data.token);
           login(result.data.token);
-        }).catch(error => {
-          console.log(error)
+        }).catch(() => {
+          toastError('E-mail ou senha inválida')
         })
     } catch (err) {
       console.log(err);
@@ -31,6 +31,7 @@ export default function Login() {
   }
   return (
     <Container>
+      <ToastContainer />
       <Title>Login</Title>
       <Text>E-mail</Text>
       <Input

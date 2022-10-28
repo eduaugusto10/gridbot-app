@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { Input, Container, Title, Button, Text, View } from "../../styleglobal";
 import api from "../../services/api";
-
+import { ToastContainer } from "react-toastify";
+import { toastError, toastSuccess } from "../../components/Toast";
 export default function Create() {
   const history = useNavigate();
   const [name, setName] = useState("");
@@ -37,15 +38,17 @@ export default function Create() {
           },
         })
         .then((result) => {
-          BackHome();
-        });
+          toastSuccess("Usuário criado com sucesso")
+        }).then(() => setTimeout(() => BackHome(), 2000))
+        .catch(() => toastError("Erro ao criar usuário"))
     } catch (error) {
-      console.log(error);
+      toastError("Erro ao criar usuário")
     }
   }
 
   return (
     <Container>
+      <ToastContainer />
       <Title>Criar usuário</Title>
       <Text>Nome</Text>
       <Input
@@ -88,7 +91,7 @@ export default function Create() {
         type="number"
         value={multiplier}
         onChange={(e) => setMultiplier(e.target.value)}
-      />      
+      />
       <View>
         <Button onClick={BackHome}>Voltar</Button>
         <Button onClick={SaveData}>Salvar</Button>

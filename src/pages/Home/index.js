@@ -2,7 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../../context/auth";
-
+import { ToastContainer } from "react-toastify";
+import { toastSuccess, toastError } from '../../components/Toast'
 import {
   Button,
   MicroButton,
@@ -39,11 +40,11 @@ export default function Home() {
   function DeleteUser(account) {
     try {
       api.delete(`/user/${account}`).then(result => {
-        console.log("Usuário deletado")
+        toastSuccess("Usuário deletado com sucesso")
         setUpdateUser(true)
-      })
+      }).catch(() => toastError("Erro ao deletar usuário"))
     } catch (error) {
-      console.log(error)
+      toastError("Erro ao deletar usuário")
     }
   }
   function EncerrarOrdens() {
@@ -60,19 +61,20 @@ export default function Home() {
     }
     try {
       api.post(`/order/`, data).then(result => {
-        console.log("Comando enviado com sucesso")
-      })
+        toastSuccess("Comando enviado com sucesso")
+      }).catch(() => toastError("Falha ao enviar o comando"))
     } catch (error) {
-      console.log(error)
+      toastError("Falha ao enviar o comando")
     }
   }
   return (
     <div>
+      <ToastContainer />
       <Button onClick={CreateUser}>Criar usuário</Button>
       <Button delete onClick={EncerrarOrdens}>Encerrar ordens</Button>
       {customers &&
         customers.map((customer, index) => (
-          <List style={{borderTop:'1px solid black', paddingBottom:'8px'}} key={index}>
+          <List style={{ borderTop: '1px solid black', paddingBottom: '8px' }} key={index}>
             <Div>
               <Text>
                 {customer.name}

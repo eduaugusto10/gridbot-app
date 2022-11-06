@@ -1,0 +1,8 @@
+{
+  "errorChangeUser": "Erro ao alterar usuário",
+  "errorCreateUser": "Erro ao criar usuário",
+  "successCreateUser": "Usuário criado com sucesso",
+  "successChangeUser": "Usuário alterado com sucesso",
+  "successBotCreate": "Bot cadastrado com sucesso",
+  "errorBotCreate": "Erro ao cadastrar bot"
+}

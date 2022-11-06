@@ -2,8 +2,8 @@ import axios from "axios";
 import { getToken } from "./auth";
 
 const api = axios.create({
-  baseURL: "https://gridbot.com.br/api",
-  // baseURL: "http://localhost:5000",
+  // baseURL: "https://gridbot.com.br/api",
+  baseURL: "http://localhost:5000",
   timeout: 10000,
 });
 

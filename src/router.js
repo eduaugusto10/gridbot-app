@@ -6,6 +6,8 @@ import Login from "./pages/Login";
 import AuthContext from "./context/auth";
 
 import { Route, Routes, BrowserRouter } from "react-router-dom";
+import CreateEA from "./pages/CreateEA";
+import UserBot from "./pages/UserBot";
 
 const HomeRoute = () => {
   const { signed } = useContext(AuthContext);
@@ -21,6 +23,16 @@ const CreateRoute = () => {
 
   return signed ? <Create /> : <Login />;
 };
+const CreateEARoute = () => {
+  const { signed } = useContext(AuthContext);
+
+  return signed ? <CreateEA /> : <Login />;
+};
+const UserBotRoute = () => {
+  const { signed } = useContext(AuthContext);
+
+  return signed ? <UserBot /> : <Login />;
+};
 
 const Router = () => (
   <BrowserRouter>
@@ -29,6 +41,8 @@ const Router = () => (
       <Route path="/create" element={<CreateRoute />} />
       <Route path="/change" element={<ChangeRoute />} />
       <Route path="/home" element={<HomeRoute />} />
+      <Route path="/createa" element={<CreateEARoute />} />
+      <Route path="/userbot" element={<UserBotRoute />} />
       <Route path="/" element={<HomeRoute />} />
       <Route path="*" element={<HomeRoute />} />
     </Routes>

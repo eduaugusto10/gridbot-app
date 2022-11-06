@@ -5,6 +5,7 @@ import AuthContext from "../../context/auth";
 import { Input, Container, Title, Button, Text, View } from "../../styleglobal";
 import { ToastContainer } from "react-toastify";
 import { toastError, toastSuccess } from "../../components/Toast";
+import messages from "../../components/Toast/messages.json"
 export default function Change() {
   const history = useNavigate();
   const { userID } = useContext(AuthContext);
@@ -12,8 +13,7 @@ export default function Change() {
   const [email, setEmail] = useState("");
   const [account, setAccount] = useState("");
   const [phone, setPhone] = useState("");
-  const [multiplier, setMultiplier] = useState("");
-  const [validate, setValidate] = useState("");
+  const [broker, setBroker] = useState("");
 
   useEffect(() => {
     try {
@@ -21,14 +21,13 @@ export default function Change() {
         setName(result.data.name);
         setEmail(result.data.email);
         setAccount(result.data.account);
-        setValidate(result.data.validate);
-        setMultiplier(result.data.multiplier);
+        setBroker(result.data.broker);
         setPhone(result.data.phone)
       });
     } catch (error) {
       console.log(error);
     }
-  },[] );
+  }, []);
 
   function BackHome() {
     history("/home");
@@ -36,19 +35,18 @@ export default function Change() {
 
   function SaveData() {
     const data = {
-    name,
-    email,
-    account,
-    validate,
-    multiplier,
-    phone    
+      name,
+      email,
+      account,
+      broker,
+      phone
     }
     try {
       api.put(`/user/${userID}`, data).then((result) => {
-        toastSuccess("Usuário alterado com sucesso")
+        toastSuccess(messages.successChangeUser)
       }).then(() => setTimeout(() => BackHome(), 2000))
     } catch (error) {
-      toastError("Erro ao alterar usuário")
+      toastError(messages.errorChangeUser)
     }
   }
 
@@ -68,23 +66,17 @@ export default function Change() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
+      <Text>Corretora</Text>
+      <Input
+        type="text"
+        value={broker}
+        onChange={(e) => setBroker(e.target.value)}
+      />
       <Text>Conta da corretora</Text>
       <Input
         type="number"
         value={account}
         onChange={(e) => setAccount(e.target.value)}
-      />
-      <Text>Validade</Text>
-      <Input
-        type="date"
-        value={validate}
-        onChange={(e) => setValidate(e.target.value)}
-      />
-      <Text>Multiplicador de lote</Text>
-      <Input
-        type="number"
-        value={multiplier}
-        onChange={(e) => setMultiplier(e.target.value)}
       />
       <Text>Telefone</Text>
       <Input

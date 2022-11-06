@@ -4,6 +4,7 @@ import { Input, Container, Title, Button, Text, View } from "../../styleglobal";
 import api from "../../services/api";
 import { ToastContainer } from "react-toastify";
 import { toastError, toastSuccess } from "../../components/Toast";
+import messages from '../../components/Toast/messages.json'
 export default function Create() {
   const history = useNavigate();
   const [name, setName] = useState("");
@@ -11,8 +12,7 @@ export default function Create() {
   const [password, setPassword] = useState("");
   const [account, setAccount] = useState("");
   const [phone, setPhone] = useState("");
-  const [multiplier, setMultiplier] = useState("");
-  const [validate, setValidate] = useState("");
+  const [broker, setBroker] = useState("");
   const [administrator, setAdministrator] = useState()
   function BackHome() {
     history("/home");
@@ -25,8 +25,7 @@ export default function Create() {
       password,
       account,
       phone,
-      multiplier,
-      validate,
+      broker,
       administrator
     }
     try {
@@ -38,11 +37,11 @@ export default function Create() {
           },
         })
         .then((result) => {
-          toastSuccess("Usuário criado com sucesso")
+          toastSuccess(messages.successCreateUser)
         }).then(() => setTimeout(() => BackHome(), 2000))
-        .catch(() => toastError("Erro ao criar usuário"))
+        .catch(() => toastError(messages.errorCreateUser))
     } catch (error) {
-      toastError("Erro ao criar usuário")
+      toastError(messages.errorCreateUser)
     }
   }
 
@@ -62,6 +61,12 @@ export default function Create() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
+      <Text>Corretora</Text>
+      <Input
+        type="text"
+        value={broker}
+        onChange={(e) => setBroker(e.target.value)}
+      />
       <Text>Conta da corretora</Text>
       <Input
         type="number"
@@ -79,18 +84,6 @@ export default function Create() {
         type="number"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
-      />
-      <Text>Validade</Text>
-      <Input
-        type="date"
-        value={validate}
-        onChange={(e) => setValidate(e.target.value)}
-      />
-      <Text>Multiplicador de lote</Text>
-      <Input
-        type="number"
-        value={multiplier}
-        onChange={(e) => setMultiplier(e.target.value)}
       />
       <View>
         <Button onClick={BackHome}>Voltar</Button>

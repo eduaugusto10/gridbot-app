@@ -32,9 +32,16 @@ export default function Home() {
   function CreateUser() {
     history("/create");
   }
+  function CreateBot() {
+    history("/createa");
+  }
   function ChangeUser(e) {
     changeUser(e);
     history("/change");
+  }
+  function UserBot(e) {
+    changeUser(e);
+    history("/userbot");
   }
 
   function DeleteUser(account) {
@@ -70,6 +77,7 @@ export default function Home() {
   return (
     <div>
       <ToastContainer />
+      <Button onClick={CreateBot}>Criar bot</Button>
       <Button onClick={CreateUser}>Criar usuário</Button>
       <Button delete onClick={EncerrarOrdens}>Encerrar ordens</Button>
       {customers &&
@@ -117,6 +125,13 @@ export default function Home() {
                 }}
               >
                 Alterar
+              </MicroButton>
+              <MicroButton
+                onClick={() => {
+                  UserBot(customer.id);
+                }}
+              >
+                Bot
               </MicroButton>
               <MicroButton delete
                 onClick={() => {

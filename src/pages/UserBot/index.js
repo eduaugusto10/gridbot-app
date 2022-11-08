@@ -64,19 +64,15 @@ export default function UserBot() {
 
         }
     }
-    const handleChangeMult = (lot, index) => {
+    const handleChangeMult = (lot, index, valid) => {
         let newBotCustomer = [...botCustomer]
         newBotCustomer[index].lote = lot
+        newBotCustomer[index].validate = valid
         setBotCustomer(newBotCustomer)
+        setValidate(moment(valid).format("YYYY-MM-DD"))
         setLote(lot)
     }
-    const handleChangeDate = (newData, index) => {
 
-        let newDates = [...botCustomer]
-        newDates[index].validate = newData
-        setBotCustomer(newDates)
-        setValidate(moment(newData).format("YYYY-MM-DD"))
-    }
     return (
         <Container>
             <ToastContainer />
@@ -84,27 +80,29 @@ export default function UserBot() {
             {botCustomer && botCustomer.map((bot, index) => (
                 <div style={{ margin: "5px" }} key={index}>
                     <Text style={{ margin: "5px" }}>Magic number: {bot.magicNumber}</Text>
-                    <input onChange={e => handleChangeDate(e.target.value, index)} style={{ margin: "5px" }} type="date" value={moment(bot.validate).format("YYYY-MM-DD")} />
-                    <input onChange={e => handleChangeMult(e.target.value, index)} style={{ margin: "5px", width: "40px" }} type="number" value={bot.lote} />
+                    <input onChange={e => handleChangeMult(bot.lote, index, e.target.value)} style={{ margin: "5px" }} type="date" value={moment(bot.validate).format("YYYY-MM-DD")} />
+                    <input onChange={e => handleChangeMult(e.target.value, index, bot.validate)} style={{ margin: "5px", width: "40px" }} type="number" value={bot.lote} />
                     <button onClick={() => handleChange(bot.id)} style={{ margin: "5px" }}>Alterar</button>
                 </div>
             ))}
             <Title>Cadastrar bot no usuário</Title>
             <Text>Bot</Text>
-            <Select
-                options={data}
-                getOptionLabel={option => option.magicNumber + " - " + option.description}
-                getOptionValue={option => option.magicNumber}
-                onChange={e => setNewMagicNumber(e.magicNumber)}
-            />
-            <Text>Validade</Text>
-            <Input type="date" onChange={e => setNewValidate(e.target.value)} value={newValidate} />
-            <Text>Multiplicador</Text>
-            <Input type="number" onChange={e => setNewMultiplicator(e.target.value)} value={newMultiplicator} />
-            <View>
-                <Button onClick={() => history('/home')}>Voltar</Button>
-                <Button onClick={handleSave}>Salvar</Button>
-            </View>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Select
+                    options={data}
+                    getOptionLabel={option => option.magicNumber + " - " + option.description}
+                    getOptionValue={option => option.magicNumber}
+                    onChange={e => setNewMagicNumber(e.magicNumber)}
+                />
+                <Text>Validade</Text>
+                <Input type="date" onChange={e => setNewValidate(e.target.value)} value={newValidate} />
+                <Text>Multiplicador</Text>
+                <Input type="number" onChange={e => setNewMultiplicator(e.target.value)} value={newMultiplicator} />
+                <View>
+                    <Button onClick={() => history('/home')}>Voltar</Button>
+                    <Button onClick={handleSave}>Salvar</Button>
+                </View>
+            </div>
         </Container>
     )
 }

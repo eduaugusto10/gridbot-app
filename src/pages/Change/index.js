@@ -44,7 +44,7 @@ export default function Change() {
     try {
       api.put(`/user/${userID}`, data).then((result) => {
         toastSuccess(messages.successChangeUser)
-      }).then(() => setTimeout(() => BackHome(), 2000))
+      }).then(() => setTimeout(() => history("/home"), 2000))
     } catch (error) {
       toastError(messages.errorChangeUser)
     }

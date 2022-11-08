@@ -28,13 +28,23 @@ export default function Home() {
           setCustomers(result.data.users);
           setOrders(result.data.ordersSlave);
         });
-        setUpdateUser(false)
       } catch (err) {
         console.log(err);
       }
     }, 5000)
     return () => clearInterval(intervalId);
   }, [updateUser]);
+
+  useEffect(() => {
+    try {
+      api.get("/user").then((result) => {
+        setCustomers(result.data.users);
+        setOrders(result.data.ordersSlave);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
   function CreateUser() {
     history("/create");
@@ -62,7 +72,7 @@ export default function Home() {
     try {
       api.delete(`/user/${account}`).then(result => {
         toastSuccess("Usuário deletado com sucesso")
-        setUpdateUser(true)
+        setUpdateUser(prevUpdateUser => !prevUpdateUser)
       }).catch(() => toastError("Erro ao deletar usuário"))
     } catch (error) {
       toastError("Erro ao deletar usuário")

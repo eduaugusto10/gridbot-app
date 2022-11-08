@@ -10,23 +10,30 @@ import {
   Text,
   Div,
   List,
+  Input,
 } from "../../styleglobal";
 
 export default function Home() {
   const [customers, setCustomers] = useState([]);
+  const [orders, setOrders] = useState([])
   const [updateUser, setUpdateUser] = useState(false)
+  const [magicNumber, setNewMagicNumber] = useState()
   const history = useNavigate();
   const { changeUser } = useContext(AuthContext);
 
   useEffect(() => {
-    try {
-      api.get("/user").then((result) => {
-        setCustomers(result.data);
-      });
-      setUpdateUser(false)
-    } catch (err) {
-      console.log(err);
-    }
+    const intervalId = setInterval(() => {
+      try {
+        api.get("/user").then((result) => {
+          setCustomers(result.data.users);
+          setOrders(result.data.ordersSlave);
+        });
+        setUpdateUser(false)
+      } catch (err) {
+        console.log(err);
+      }
+    }, 5000)
+    return () => clearInterval(intervalId);
   }, [updateUser]);
 
   function CreateUser() {
@@ -43,7 +50,14 @@ export default function Home() {
     changeUser(e);
     history("/userbot");
   }
-
+  const StatusOrder = (id) => {
+    let status = "OK"
+    for (let i = 0; i < orders.length; i++) {
+      if (orders[i].slaveOrders === id && orders[i].status === "NOK")
+        return orders[i].magicNumber
+    }
+    return status
+  }
   function DeleteUser(account) {
     try {
       api.delete(`/user/${account}`).then(result => {
@@ -74,12 +88,36 @@ export default function Home() {
       toastError("Falha ao enviar o comando")
     }
   }
+  function EncerrarMagicNumberOrdens() {
+    const data = {
+      "ticket": 0,
+      "symbol": "CLOSEMAGICNUMBER",
+      "price": 0,
+      "takeProfit": 0,
+      "stopLoss": 0,
+      "operationType": 89,
+      "orderType": 89,
+      "percentage": 99,
+      "magicNumber": magicNumber,
+      "status_order": "CLOSEMAGICNUMBER"
+    }
+    try {
+      api.post(`/order/`, data).then(result => {
+        toastSuccess("Comando enviado com sucesso")
+      }).catch(() => toastError("Falha ao enviar o comando"))
+    } catch (error) {
+      toastError("Falha ao enviar o comando")
+    }
+  }
+
   return (
     <div>
       <ToastContainer />
       <Button onClick={CreateBot}>Criar bot</Button>
       <Button onClick={CreateUser}>Criar usuário</Button>
-      <Button delete onClick={EncerrarOrdens}>Encerrar ordens</Button>
+      <Button delete onClick={EncerrarOrdens}>Encerrar todas ordens</Button>
+      <Input type="number" placeholder="Insira o magic number" onChange={e => setNewMagicNumber(e.target.value)} />
+      <Button delete onClick={EncerrarMagicNumberOrdens}>Encerrar magic number</Button>
       {customers &&
         customers.map((customer, index) => (
           <List style={{ borderTop: '1px solid black', paddingBottom: '8px' }} key={index}>
@@ -99,16 +137,16 @@ export default function Home() {
             </Div>
             <Div>
               <Text>
-                {customer.account}
+                {customer.broker}
                 <br />
-                Conta corretora
+                {customer.account}
               </Text>
             </Div>
             <Div>
-              <Text>
-                {customer.multiplier}
+              <Text style={{ color: 'white', backgroundColor: `${StatusOrder(customer.id) === "OK" ? "green" : 'red'}` }}>
+                {StatusOrder(customer.id)}
                 <br />
-                Multiplicador
+                Ordens
               </Text>
             </Div>
             <Div>

@@ -11,12 +11,12 @@ export default function UserBot() {
 
     const history = useNavigate()
     const { userID } = useContext(AuthContext);
+    const [reload, setReload] = useState(false)
     const [data, setData] = useState([])
     const [botCustomer, setBotCustomer] = useState([])
     const [newMagicNumber, setNewMagicNumber] = useState()
     const [newValidate, setNewValidate] = useState()
     const [newMultiplicator, setNewMultiplicator] = useState()
-    const [botID, setBotID] = useState()
     const [validate, setValidate] = useState()
     const [lote, setLote] = useState()
 
@@ -37,16 +37,21 @@ export default function UserBot() {
         } catch (error) {
 
         }
-    }, [])
+    }, [reload])
+
     const handleSave = () => {
-        console.log(newMagicNumber + " " + newMultiplicator + " " + userID + " " + newValidate)
         try {
             api.post('/botcustomer', {
                 "magicNumber": newMagicNumber,
                 "validate": newValidate,
                 "lote": newMultiplicator,
                 "customerBot": userID
-            }).then(() => toastSuccess("Bot vinculado com sucesso"))
+            }).then(() => {
+                toastSuccess("Bot vinculado com sucesso")
+                setReload(prevReload => !prevReload)
+            }).catch(error => {
+                toastError("Bot já cadastrado")
+            })
         } catch (error) {
 
         }

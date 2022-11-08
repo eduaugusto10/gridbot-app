@@ -16,6 +16,9 @@ export default function CreateEA() {
                 .then(() => {
                     toastSuccess(messages.successBotCreate)
                 }).then(() => setTimeout(() => history('/home'), 2000))
+                .catch(error => {
+                    toastError("Magic number repetido")
+                })
         } catch (error) {
             toastError(messages.errorCreateBot)
         }

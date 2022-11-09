@@ -11,7 +11,7 @@ export default function CreateEA() {
     const [magicNumber, setMagicNumber] = useState(0)
 
     const handleSubmit = () => {
-        if (description !== null && magicNumber !== 0) {
+        if (description !== '' && magicNumber !== 0) {
             try {
                 api.post('/bot', { magicNumber, description })
                     .then(() => {

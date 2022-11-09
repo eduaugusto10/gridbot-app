@@ -11,16 +11,20 @@ export default function CreateEA() {
     const [magicNumber, setMagicNumber] = useState(0)
 
     const handleSubmit = () => {
-        try {
-            api.post('/bot', { magicNumber, description })
-                .then(() => {
-                    toastSuccess(messages.successBotCreate)
-                }).then(() => setTimeout(() => history('/home'), 2000))
-                .catch(error => {
-                    toastError("Magic number repetido")
-                })
-        } catch (error) {
-            toastError(messages.errorCreateBot)
+        if (description !== null && magicNumber !== 0) {
+            try {
+                api.post('/bot', { magicNumber, description })
+                    .then(() => {
+                        toastSuccess(messages.successBotCreate)
+                    }).then(() => setTimeout(() => history('/home'), 2000))
+                    .catch(error => {
+                        toastError("Magic number repetido")
+                    })
+            } catch (error) {
+                toastError(messages.errorCreateBot)
+            }
+        }else{
+            toastError("Insira descrição e número mágico")
         }
     }
 

@@ -99,6 +99,7 @@ export default function Home() {
     }
   }
   function EncerrarMagicNumberOrdens() {
+
     const data = {
       "ticket": 0,
       "symbol": "CLOSEMAGICNUMBER",
@@ -111,12 +112,16 @@ export default function Home() {
       "magicNumber": magicNumber,
       "status_order": "CLOSEMAGICNUMBER"
     }
-    try {
-      api.post(`/order/`, data).then(result => {
-        toastSuccess("Comando enviado com sucesso")
-      }).catch(() => toastError("Falha ao enviar o comando"))
-    } catch (error) {
-      toastError("Falha ao enviar o comando")
+    if (magicNumber !== undefined) {
+      try {
+        api.post(`/order/`, data).then(result => {
+          toastSuccess("Comando enviado com sucesso")
+        }).catch(() => toastError("Falha ao enviar o comando"))
+      } catch (error) {
+        toastError("Falha ao enviar o comando")
+      }
+    } else {
+      toastError("Insira número mágico válido")
     }
   }
 

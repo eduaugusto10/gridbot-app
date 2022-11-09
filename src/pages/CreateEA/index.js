@@ -7,11 +7,11 @@ import { toastError, toastSuccess } from "../../components/Toast";
 import messages from "../../components/Toast/messages.json"
 export default function CreateEA() {
     const history = useNavigate()
-    const [description, setDescription] = useState('')
+    const [description, setDescription] = useState(null)
     const [magicNumber, setMagicNumber] = useState(0)
 
     const handleSubmit = () => {
-        if (description !== '' && magicNumber !== 0) {
+        if (description !== null && magicNumber !== 0) {
             try {
                 api.post('/bot', { magicNumber, description })
                     .then(() => {
